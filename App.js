@@ -1,5 +1,5 @@
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React, {useState} from "react";
+import { StyleSheet, Text, View, Modal, Button } from "react-native";
 
 import { LinearGradient } from "expo-linear-gradient";
 
@@ -9,6 +9,36 @@ import Card from "./components/Card";
 import Colors from "./constants/colors";
 
 export default function App() {
+
+  const [viewStartGameVisible, setViewStartGameVisible] = useState(false);
+  const [numeroConfirmado, setNumeroConfirmado] = useState('');
+
+  const startGameHandler = (numeroconfirmado) => {
+    console.log("Foi");
+    console.log(numeroconfirmado);
+
+    if(numeroconfirmado === 2){
+      setModalStartGameVisible(true);
+      numeroConfirmado = parseInt(numeroconfirmado);
+    }
+    
+  };
+
+  function renderStartGameCard() {
+    
+    if(viewStartGameVisible){
+      return(
+        <Card>
+          <Text>Número</Text>
+          <Text>{numeroConfirmado}</Text>
+          <Button title="Continuar" />
+        </Card>
+      );
+    }
+
+    return null
+  }
+
   return (
     <View style={styles.root}>
       <View style={styles.statusBar}>
@@ -27,8 +57,12 @@ export default function App() {
         </Card>
 
         <Card>
-          <StartGameScreen />
+          <StartGameScreen startGame={startGameHandler} />
         </Card>
+
+      <View>
+        {renderStartGameCard()}
+      </View>
       </View>
     </View>
   );

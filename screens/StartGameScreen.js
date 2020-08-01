@@ -24,6 +24,10 @@ const StartGameScreen = (props) => {
   const resetInputHandler = () => {
     setNumeroInserido("");
     setConfirmado(false);
+    setNumeroConfirmado('');
+  };
+
+  const startGame = () => {
   };
 
   const confirmInputHandler = () => {
@@ -38,8 +42,6 @@ const StartGameScreen = (props) => {
       return;
     }
 
-    Alert.alert('Número Inválido', 'Número precisa ser entre 1 e 99',[{text: 'Ok', style: 'destructive'}, {text:'cancel', style:'cancel', onPress: resetInputHandler}]);
-
     setConfirmado(true);
     setNumeroConfirmado(numeroParaTestar);
     setNumeroInserido("");
@@ -48,7 +50,8 @@ const StartGameScreen = (props) => {
   let alertaConfirmacao;
 
   if (confirmado) {
-    alertaConfirmacao = <Text>Valor Escolhido: {numeroConfirmado}</Text>
+    console.log("Confirmado!");
+    props.startGame.bind(this, numeroConfirmado)
   }
 
   return (
@@ -90,8 +93,6 @@ const StartGameScreen = (props) => {
             />
           </View>
         </View>
-        
-      <View>{alertaConfirmacao}</View>
       </View>
     </TouchableWithoutFeedback>
   );
