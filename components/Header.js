@@ -12,6 +12,7 @@ const Header = (props) => {
 const styles = StyleSheet.create({
   barra: {
     paddingVertical: 16,
+    paddingHorizontal: 12,
     alignContent: "center",
     alignItems: "center",
   },

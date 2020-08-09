@@ -1,42 +1,50 @@
-import React, {useState} from "react";
-import { StyleSheet, Text, View, Modal, Button } from "react-native";
+import React, { useState } from "react";
+import { StyleSheet, View } from "react-native";
 
 import { LinearGradient } from "expo-linear-gradient";
 
 import Header from "./components/Header";
 import StartGameScreen from "./screens/StartGameScreen";
+import GameScreen from "./screens/GameScreen";
 import Card from "./components/Card";
 import Colors from "./constants/colors";
+import GameOverScreen from "./screens/GameOverScreen";
 
 export default function App() {
+  const [userNumber, setUserNumber] = useState();
+  const [guessRounds, setGuessRouds] = useState(0);
 
-  const [viewStartGameVisible, setViewStartGameVisible] = useState(false);
-  const [numeroConfirmado, setNumeroConfirmado] = useState('');
-
-  const startGameHandler = (numeroconfirmado) => {
-    console.log("Foi");
-    console.log(numeroconfirmado);
-
-    if(numeroconfirmado === 2){
-      setModalStartGameVisible(true);
-      numeroConfirmado = parseInt(numeroconfirmado);
-    }
-    
+  const startGameHandler = (selectedNumber) => {
+    setUserNumber(selectedNumber);
+    setGuessRouds(0);
   };
 
-  function renderStartGameCard() {
-    
-    if(viewStartGameVisible){
-      return(
-        <Card>
-          <Text>Número</Text>
-          <Text>{numeroConfirmado}</Text>
-          <Button title="Continuar" />
-        </Card>
-      );
-    }
+  const gameOverHandler = (numOfRounds) => {
+    setGuessRouds(numOfRounds);
+  };
 
-    return null
+  const newGameHandler = () => {
+    setGuessRouds(0);
+    setUserNumber(false);
+  };
+
+  let content = <StartGameScreen onStartGame={startGameHandler} />;
+  let titleContent = "Pense em um número";
+
+  if (userNumber && guessRounds <= 0) {
+    content = (
+      <GameScreen userChoice={userNumber} onGameOver={gameOverHandler} />
+    );
+    titleContent = "Deixa eu ver...";
+  } else if (guessRounds > 0) {
+    content = (
+      <GameOverScreen
+        gameRounds={guessRounds}
+        userChoice={userNumber}
+        onNewGame={newGameHandler}
+      />
+    );
+    titleContent = "Mais difícil da próxima, hein!";
   }
 
   return (
@@ -53,27 +61,22 @@ export default function App() {
 
       <View style={styles.container}>
         <Card>
-          <Header title="Pense em um Número" />
+          <Header title={titleContent} />
         </Card>
 
-        <Card>
-          <StartGameScreen startGame={startGameHandler} />
-        </Card>
-
-      <View>
-        {renderStartGameCard()}
-      </View>
+        <View style={styles.startGame}>{content}</View>
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: Colors.materialBackground },
+  root: { flex: 1, backgroundColor: Colors.background },
 
   container: {
     alignItems: "center",
   },
   statusBar: { width: "100%", height: "4%" },
   gradient: { padding: "10%" },
+  startGame: { width: "95%" },
 });
