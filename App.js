@@ -11,6 +11,8 @@ import Colors from "./constants/colors";
 import GameOverScreen from "./screens/GameOverScreen";
 
 export default function App() {
+  const { generateRandomSentences } = require("./components/RadomSentences");
+
   const [userNumber, setUserNumber] = useState();
   const [guessRounds, setGuessRouds] = useState(0);
 
@@ -44,7 +46,15 @@ export default function App() {
         onNewGame={newGameHandler}
       />
     );
-    titleContent = "Mais difícil da próxima, hein!";
+
+    titleContent = generateRandomSentences("ONGAMEOVERTEXT", 0, 4, "");
+
+    if (guessRounds > 5 && guessRounds < 10) {
+      titleContent = generateRandomSentences("ONGAMEOVERTEXT", 4, 8, "");
+    }
+    if (guessRounds > 10) {
+      titleContent = generateRandomSentences("ONGAMEOVERTEXT", 8, 11, "");
+    }
   }
 
   return (

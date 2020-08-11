@@ -27,16 +27,19 @@ const generateRandomBetween = (min, max, exclude) => {
 };
 
 const GameScreen = (props) => {
+  const { generateRandomSentences } = require("../components/RadomSentences");
+  const { userChoice, onGameOver } = props;
+
   const [rounds, setRounds] = useState(0);
-
-  const currentMin = useRef(1);
-  const currentMax = useRef(100);
-
   const [currentGuess, setCurrentGuess] = useState(
     generateRandomBetween(1, 100, userChoice)
   );
+  const [sentenceTextChat, setSentenceTextChat] = useState(
+    generateRandomSentences("ONGAMETEXTCHAT", 0, 5, "")
+  );
 
-  const { userChoice, onGameOver } = props;
+  const currentMin = useRef(1);
+  const currentMax = useRef(100);
 
   useEffect(() => {
     if (currentGuess === userChoice) {
@@ -64,11 +67,15 @@ const GameScreen = (props) => {
     );
 
     setRounds((rounds) => rounds + 1);
+    setSentenceTextChat(generateRandomSentences("ONGAMETEXTCHAT", 0, 5, ""));
   };
 
   return (
     <View style={styles.root}>
       <Card>
+        <View style={styles.sentenceTextChatView}>
+          <Text style={styles.sentenceTextChat}>{sentenceTextChat}</Text>
+        </View>
         <NumberContainer style={styles.numberContainer}>
           {currentGuess}
         </NumberContainer>
@@ -98,6 +105,15 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     justifyContent: "space-between",
+  },
+  sentenceTextChatView: {
+    alignItems: "center",
+    padding: 12,
+  },
+  sentenceTextChat: {
+    color: Colors.textBase,
+    fontSize: 16,
+    fontWeight: "400",
   },
   numberContainer: {
     alignSelf: "center",
